@@ -1,4 +1,4 @@
-package com.android.devtools
+package com.android.devtools.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,37 +11,29 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.android.devtools.ui.theme.DevToolsTheme
+import androidx.core.view.WindowCompat
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.android.devtools.presentation.navigation.AppNavigation
+import com.android.devtools.presentation.ui.theme.DevToolsTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
-            DevToolsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            val navHostController = rememberNavController()
+            navigationComponent(navHostController)
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
+fun ComponentActivity.navigationComponent(navHostController: NavHostController) = setContent {
     DevToolsTheme {
-        Greeting("Android")
+        AppNavigation(navHostController)
     }
 }
