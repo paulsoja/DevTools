@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DevTools</string>
+
+    <string name="menu_item_api_check">api check</string>
 </resources>
