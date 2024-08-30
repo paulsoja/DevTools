@@ -79,10 +79,11 @@ class DataModule {
             json(
                 Json {
                     prettyPrint = true
+                    prettyPrintIndent = " "
                     isLenient = true
                     useAlternativeNames = true
                     ignoreUnknownKeys = true
-                    encodeDefaults = false
+                    encodeDefaults = true
                 }
             )
         }

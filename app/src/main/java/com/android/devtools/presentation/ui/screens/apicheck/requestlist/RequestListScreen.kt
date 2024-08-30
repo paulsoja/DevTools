@@ -1,4 +1,4 @@
-package com.android.devtools.presentation.ui.screens.apicheck
+package com.android.devtools.presentation.ui.screens.apicheck.requestlist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,11 +15,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.devtools.presentation.navigation.AppNavigator
 import com.android.devtools.presentation.ui.screens.apicheck.components.RequestItem
 
 @Composable
-fun ApiCheckScreen(appNavigator: AppNavigator, paddingValues: PaddingValues) {
+fun RequestListScreen(appNavigator: AppNavigator, paddingValues: PaddingValues) {
+
+    val viewModel = hiltViewModel<RequestListViewModel>()
+
     Column(
         modifier = Modifier
             .fillMaxSize()

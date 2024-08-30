@@ -30,18 +30,26 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.android.devtools.presentation.navigation.graphs.apiCheckGraph
 import com.android.devtools.presentation.navigation.menu.MenuNavItemsFlow
+import com.android.devtools.presentation.navigation.navFlow.ApiCheckFlow
 import com.android.devtools.presentation.ui.theme.RippleCustomTheme
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,17 +61,34 @@ fun AppNavigation(navController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     CompositionLocalProvider(LocalRippleTheme provides RippleCustomTheme) {
+        var visibleMenu by rememberSaveable {
+            mutableStateOf(false)
+        }
+
+        LaunchedEffect(key1 = navController.currentBackStackEntryFlow) {
+            navController.currentBackStackEntryFlow.collectLatest {
+                visibleMenu = when (it.destination.route?.substringBefore("?")) {
+                    ApiCheckFlow.ResponseOverview.flowRoute.route -> false
+                    else -> true
+                }
+            }
+        }
+
         Scaffold(
-            modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = Modifier
+                .fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
             contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             topBar = {
-                TopAppBar(
-                    title = { Text(text = "DevTools") },
-                    scrollBehavior = scrollBehavior,
-                )
+                AnimatedVisibility(visible = visibleMenu) {
+                    TopAppBar(
+                        title = { Text(text = "DevTools") },
+                        scrollBehavior = scrollBehavior,
+                    )
+                }
             },
             bottomBar = {
-                BottomNavBar(showBottomBar = true, appNavigator = appNavigator)
+                BottomNavBar(showBottomBar = visibleMenu, appNavigator = appNavigator)
             },
         ) { paddingValues ->
             StartFlow(
@@ -137,4 +162,15 @@ private fun BottomNavBar(
             }
         }
     )
+}
+
+fun NavBackStackEntry.getFormattedRoute(scheme: String): String {
+    var formattedRoute = this.destination.route.orEmpty()
+    this.arguments?.let {
+        for (key in it.keySet()) {
+            val value = it.get(key)?.toString().orEmpty()
+            formattedRoute = formattedRoute.replace("{$key}", value)
+        }
+    }
+    return "$scheme://$formattedRoute"
 }

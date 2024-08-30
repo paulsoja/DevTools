@@ -11,5 +11,11 @@ abstract class ApiCheckFlow(
     override val argKey3: String? = null,
 ) : NavFlow() {
 
-    data object ApiCheck : ApiCheckFlow(NavFlowRoute("ApiCheck"), "ApiCheck")
+    data object RequestList : ApiCheckFlow(NavFlowRoute("RequestList"), "RequestList")
+    data object CreateRequest : ApiCheckFlow(NavFlowRoute("CreateRequest"), "CreateRequest")
+    data object ResponseOverview : ApiCheckFlow(
+        flowRoute = NavFlowRoute(route = "ResponseOverview"),
+        label = "ResponseOverview",
+        argKey1 = "response_body"
+    )
 }
