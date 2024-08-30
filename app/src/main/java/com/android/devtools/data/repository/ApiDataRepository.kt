@@ -9,6 +9,7 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -44,6 +45,7 @@ class ApiDataRepository @Inject constructor(
     }
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 val format = Json {
     prettyPrint = true
     prettyPrintIndent = "   "
