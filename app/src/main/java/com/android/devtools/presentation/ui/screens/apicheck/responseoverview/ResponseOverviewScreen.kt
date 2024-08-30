@@ -13,7 +13,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.devtools.domain.api.RequestParam
 import com.android.devtools.presentation.navigation.AppNavigator
 import com.android.devtools.presentation.ui.components.topbar.DefaultTopBar
-import timber.log.Timber
 
 @Composable
 fun ResponseOverviewScreen(

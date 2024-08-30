@@ -1,8 +1,6 @@
 package com.android.devtools.data.repository
 
-import android.text.SpannableStringBuilder
 import androidx.compose.ui.text.AnnotatedString
-import com.android.devtools.data.tools.KotlinxGenericMapSerializer
 import com.android.devtools.domain.repository.ApiRepository
 import com.android.devtools.domain.usecase.SendRequestUseCase
 import com.android.devtools.presentation.support.SpanTextUtil

@@ -1,6 +1,5 @@
 package com.android.devtools.presentation.ui.screens.apicheck.createrequest
 
-import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.devtools.domain.api.RequestParam
@@ -30,13 +29,6 @@ class CreateRequestViewModel @Inject constructor(
     fun addRequestParam(index: Int, params: RequestParam) = viewModelScope.launch {
         _requestParamsState.updateAndGet {
             it.toMutableList().apply { this[index] = it[index].copy(key = params.key, value = params.value) }
-        }
-    }
-
-    fun sendRequest(url: String, params: List<RequestParam>) {
-        Timber.d("sendRequest: url=$url, params=$params")
-        viewModelScope.launch {
-
         }
     }
 }
